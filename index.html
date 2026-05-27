@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AllProPay CS Call Guide</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --navy:   #0B1120;
+            --blue:   #0052FF;
+            --blue2:  #0066FF;
+            --cyan:   #00D4FF;
+            --bg:     #f5f7fa;
+            --white:  #ffffff;
+            --green:  #16a34a;
+            --amber:  #b45309;
+            --red:    #b91c1c;
+            --text:   #0f172a;
+            --muted:  #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 12px -2px rgba(11,17,32,.10), 0 2px 4px -1px rgba(0,0,0,.05);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 80px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* ---- HEADER ---- */
+        .header {
+            background: var(--navy);
+            color: #fff;
+            padding: 14px 18px 12px;
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            box-shadow: 0 3px 10px rgba(0,0,0,.35);
+        }
+        .header-row { display: flex; justify-content: space-between; align-items: center; }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand-logo-wrap {
+            background: #fff;
+            padding: 6px 12px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,.25);
+        }
+        .brand-logo { height: 28px; width: auto; display: block; }
+        .brand-label { font-weight: 600; font-size: 12px; color: rgba(255,255,255,.7); letter-spacing: .8px; text-transform: uppercase; }
+        .reset-btn {
+            background: rgba(255,255,255,.13);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,.28);
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .2s;
+            -webkit-appearance: none;
+        }
+        .reset-btn:active { background: rgba(255,255,255,.25); }
+        .tagline {
+            font-size: 11px;
+            color: rgba(255,255,255,.45);
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+        .call-chip {
+            margin-top: 8px;
+            font-size: 13px;
+            color: rgba(255,255,255,.85);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .call-chip strong { color: #fff; }
+        .call-chip-sep { color: rgba(255,255,255,.4); }
+
+        /* ---- PROGRESS ---- */
+        .progress-wrap {
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            padding: 11px 16px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .progress-steps { display: flex; align-items: center; min-width: max-content; gap: 0; }
+        .p-step {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #9fb3c8;
+        }
+        .p-step.active { color: var(--blue); }
+        .p-step.done   { color: var(--green); }
+        .p-step.skip   { color: #c9d5e0; }
+        .p-dot {
+            width: 22px; height: 22px; border-radius: 50%;
+            border: 2px solid currentColor;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; font-weight: 800;
+            background: #fff;
+            flex-shrink: 0;
+        }
+        .p-step.active .p-dot { background: var(--blue); color: #fff; border-color: var(--blue); }
+        .p-step.done   .p-dot { background: var(--green); color: #fff; border-color: var(--green); }
+        .p-step.skip   .p-dot { background: #f1f5f9; color: #c9d5e0; border-color: #c9d5e0; }
+        .p-line { width: 22px; height: 2px; background: #dde3ec; flex-shrink: 0; }
+        .p-line.done { background: var(--green); }
+
+        /* ---- CONTENT ---- */
+        .content { padding: 16px 14px; max-width: 620px; margin: 0 auto; }
+
+        /* ---- CARDS ---- */
+        .card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 14px;
+            animation: up .22s ease;
+        }
+        @keyframes up { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+        .card-head {
+            background: var(--blue);
+            color: #fff;
+            padding: 13px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card-head.navy  { background: var(--navy); }
+        .card-head.green { background: var(--green); }
+        .card-head.amber { background: #92400e; }
+        .card-head.red   { background: var(--red); }
+        .stage-badge {
+            background: rgba(255,255,255,.2);
+            border-radius: 6px;
+            padding: 2px 9px;
+            font-size: 11.5px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .stage-title { font-size: 15px; font-weight: 700; flex: 1; }
+        .card-body { padding: 18px; }
+
+        /* ---- SCRIPT BOX ---- */
+        .script-box {
+            background: #eff4ff;
+            border: 2px solid #c7d8ff;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 14px;
+        }
+        .script-box.amber-box { background: #fffbeb; border-color: #fde68a; }
+        .script-box.green-box { background: #f0fdf4; border-color: #86efac; }
+        .script-box.red-box   { background: #fff5f5; border-color: #fca5a5; }
+        .script-lbl {
+            font-size: 10.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            color: var(--blue);
+            margin-bottom: 7px;
+        }
+        .script-lbl.amber-lbl { color: var(--amber); }
+        .script-lbl.green-lbl { color: var(--green); }
+        .script-lbl.red-lbl   { color: var(--red); }
+        .script-txt {
+            font-size: 16.5px;
+            line-height: 1.65;
+            color: var(--text);
+        }
+        .script-txt em { color: var(--blue); font-style: normal; font-weight: 700; }
+        .script-txt p  { margin-bottom: 10px; }
+        .script-txt p:last-child { margin-bottom: 0; }
+
+        /* ---- NOTICE BOX ---- */
+        .notice {
+            border-radius: 8px;
+            padding: 11px 14px;
+            font-size: 13.5px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .notice.amber { background: #fffbeb; border: 1px solid #fde68a; color: #78350f; }
+        .notice.red   { background: #fef2f2; border: 1px solid #fecaca; color: #7f1d1d; }
+        .notice.blue  { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e3a8a; }
+        .notice-icon  { flex-shrink: 0; font-size: 15px; margin-top: 1px; }
+
+        /* ---- OUTCOME BUTTONS ---- */
+        .outcome-lbl {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+        .outcome-btns { display: flex; flex-direction: column; gap: 10px; }
+        .obtn {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 15px 18px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            font-size: 15.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: filter .12s, transform .1s;
+            text-align: left;
+            width: 100%;
+            -webkit-appearance: none;
+        }
+        .obtn:active { transform: scale(.97); filter: brightness(.95); }
+        .obtn.green  { background: #dcfce7; color: #15803d; border-color: #86efac; }
+        .obtn.amber  { background: #fef9c3; color: #854d0e; border-color: #fde047; }
+        .obtn.red    { background: #fee2e2; color: var(--red); border-color: #fca5a5; }
+        .obtn.blue   { background: var(--blue); color: #fff; }
+        .obtn.grey   { background: #f1f5f9; color: var(--muted); border-color: var(--border); }
+        .obtn-icon   { font-size: 22px; flex-shrink: 0; }
+        .obtn-text   { flex: 1; }
+        .obtn-sub    { font-size: 11.5px; font-weight: 400; opacity: .75; display: block; margin-top: 2px; }
+
+        /* ---- COPY / SMS ---- */
+        .tmpl-box {
+            background: #0f172a;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+        }
+        .tmpl-lbl { font-size: 10.5px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; margin-bottom: 8px; }
+        .tmpl-txt { color: #f1f5f9; font-size: 14.5px; line-height: 1.65; white-space: pre-wrap; font-family: 'SF Mono', Consolas, monospace; }
+        .tmpl-txt a { color: var(--cyan); text-decoration: underline; }
+        .copy-btn {
+            width: 100%;
+            padding: 13px;
+            border-radius: 8px;
+            border: none;
+            background: var(--blue);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+            -webkit-appearance: none;
+        }
+        .copy-btn:active { background: var(--navy); }
+        .copy-btn.copied { background: var(--green) !important; }
+
+        /* ---- FORM ---- */
+        .input-grp { margin-bottom: 12px; }
+        .input-lbl { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 5px; display: block; text-transform: uppercase; letter-spacing: .5px; }
+        .input-field, .select-field {
+            width: 100%; padding: 13px 14px;
+            border: 2px solid var(--border);
+            border-radius: 9px; font-size: 15px; color: var(--text);
+            background: #fff; transition: border-color .2s;
+            -webkit-appearance: none;
+            font-family: inherit;
+        }
+        .select-field {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%2364748b' d='M6 8L0 0h12z'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 12px 8px;
+            padding-right: 38px;
+        }
+        .input-field:focus, .select-field:focus { outline: none; border-color: var(--blue); }
+        .textarea-field {
+            width: 100%; padding: 11px 13px;
+            border: 2px solid var(--border);
+            border-radius: 9px; font-size: 14px; color: var(--text);
+            background: #fff; resize: vertical; min-height: 76px;
+            font-family: inherit; transition: border-color .2s;
+            -webkit-appearance: none;
+        }
+        .textarea-field:focus { outline: none; border-color: var(--blue); }
+
+        /* ---- SECTION LABEL ---- */
+        .sec-lbl {
+            font-size: 11px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: .7px; color: var(--muted); margin-bottom: 10px;
+        }
+
+        /* ---- DIVIDER ---- */
+        .hr { height: 1px; background: var(--border); margin: 16px 0; }
+
+        /* ---- ACTION BUTTONS ---- */
+        .abtn {
+            width: 100%; padding: 14px 18px;
+            border-radius: 9px; border: none;
+            font-size: 15px; font-weight: 700;
+            cursor: pointer; transition: filter .12s, transform .1s;
+            -webkit-appearance: none;
+        }
+        .abtn:active { transform: scale(.98); filter: brightness(.93); }
+        .abtn.primary   { background: var(--navy); color: #fff; }
+        .abtn.secondary { background: #f1f5f9; color: var(--muted); border: 2px solid var(--border); }
+        .abtn.green     { background: var(--green); color: #fff; }
+        .btn-row { display: flex; gap: 10px; }
+        .btn-row .abtn { flex: 1; }
+
+        /* ---- SETUP ---- */
+        .setup-title    { font-size: 22px; font-weight: 800; color: var(--navy); margin-bottom: 4px; }
+        .setup-subtitle { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+        .start-btn {
+            width: 100%; padding: 16px;
+            background: var(--blue); color: #fff;
+            border: none; border-radius: 11px;
+            font-size: 17px; font-weight: 800;
+            cursor: pointer; transition: background .2s;
+            margin-top: 6px; -webkit-appearance: none;
+        }
+        .start-btn:active { background: var(--navy); }
+
+        /* ---- CHECKLIST ---- */
+        .checklist { list-style: none; }
+        .checklist li {
+            display: flex; align-items: flex-start; gap: 13px;
+            padding: 12px 0; border-bottom: 1px solid var(--border);
+            font-size: 14.5px; cursor: pointer;
+        }
+        .checklist li:last-child { border-bottom: none; }
+        .checklist input[type="checkbox"] {
+            width: 20px; height: 20px; cursor: pointer;
+            accent-color: var(--blue); flex-shrink: 0; margin-top: 2px;
+        }
+        .checklist label { cursor: pointer; line-height: 1.4; }
+
+        /* ---- TOAST ---- */
+        .toast {
+            position: fixed; bottom: 22px; left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: var(--navy); color: #fff;
+            padding: 11px 22px; border-radius: 8px;
+            font-size: 14px; font-weight: 600;
+            z-index: 500; transition: transform .28s ease;
+            white-space: nowrap; box-shadow: 0 4px 16px rgba(0,0,0,.3);
+            pointer-events: none;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        /* ---- HIDDEN ---- */
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<!-- ====== HEADER ====== -->
+<div class="header">
+    <div class="header-row">
+        <div>
+            <div class="brand"><span class="brand-logo-wrap"><img src="data:image/jpeg;base64,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" alt="AllProPay" class="brand-logo"></span><span class="brand-label">CS Call Guide</span></div>
+            <div class="tagline">Accept payments anywhere.</div>
+        </div>
+        <button class="reset-btn" onclick="confirmReset()">Reset</button>
+    </div>
+    <div class="call-chip hidden" id="callChip">
+        Call: <strong id="hClientName"></strong>
+        <span class="call-chip-sep">&middot;</span>
+        Rep: <strong id="hRepName"></strong>
+    </div>
+</div>
+
+<!-- ====== PROGRESS ====== -->
+<div class="progress-wrap hidden" id="progressWrap">
+    <div class="progress-steps" id="progressSteps"></div>
+</div>
+
+<!-- ====== CONTENT ====== -->
+<div class="content">
+
+    <!-- -- SETUP -- -->
+    <div id="s-setup">
+        <div class="card">
+            <div class="card-head navy">
+                <span class="stage-title">New Check-In Call</span>
+            </div>
+            <div class="card-body">
+                <div class="setup-subtitle">Pick yourself, type the client's first name, hit start.</div>
+
+                <div class="input-grp">
+                    <label class="input-lbl" for="f-rep">Your Name</label>
+                    <select id="f-rep" class="select-field">
+                        <option value="">&mdash; Select your name &mdash;</option>
+                        <!-- REP_LIST is populated by JS so it's edited in one place -->
+                    </select>
+                </div>
+                <div class="input-grp">
+                    <label class="input-lbl" for="f-client">Client's First Name</label>
+                    <input id="f-client" class="input-field" type="text" placeholder="e.g. Sarah" autocomplete="off" autocapitalize="words">
+                </div>
+
+                <button class="start-btn" onclick="startCall()">Start Call Guide &rarr;</button>
+            </div>
+        </div>
+        <div style="text-align:center;color:var(--muted);font-size:12.5px;padding:4px 0 8px;">
+            Target 2&ndash;4 min &middot; Support tone, not sales &middot; Your name is remembered next time
+        </div>
+    </div>
+
+    <!-- -- OPENING -- -->
+    <div id="s-opening" class="hidden">
+        <div class="card">
+            <div class="card-head">
+                <span class="stage-badge">Stage 1 of 5</span>
+                <span class="stage-title">Warm Opening</span>
+            </div>
+            <div class="card-body">
+                <div class="script-box">
+                    <div class="script-lbl">Say This</div>
+                    <div class="script-txt" id="txt-opening"></div>
+                </div>
+                <div class="outcome-lbl">How'd they respond?</div>
+                <div class="outcome-btns">
+                    <button class="obtn green" onclick="go('checkin')">
+                        <span class="obtn-icon">&#10003;</span>
+                        <span class="obtn-text">They're Available
+                            <span class="obtn-sub">Move to check-in</span>
+                        </span>
+                    </button>
+                    <button class="obtn amber" onclick="go('busy')">
+                        <span class="obtn-icon">&#9203;</span>
+                        <span class="obtn-text">They're Busy
+                            <span class="obtn-sub">Get callback time + log note</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- -- BUSY -- -->
+    <div id="s-busy" class="hidden">
+        <div class="card">
+            <div class="card-head amber">
+                <span class="stage-badge">Callback</span>
+                <span class="stage-title">They're Busy</span>
+            </div>
+            <div class="card-body">
+                <div class="script-box amber-box">
+                    <div class="script-lbl amber-lbl">Say This</div>
+                    <div class="script-txt" id="txt-busy"></div>
+                </div>
+
+                <div class="hr"></div>
+                <div class="sec-lbl">Log Your Callback</div>
+
+                <div class="input-grp">
+                    <label class="input-lbl" for="f-cbtime">Callback Date / Time</label>
+                    <input id="f-cbtime" class="input-field" type="text" placeholder="e.g. Thursday after 2pm" autocomplete="off">
+                </div>
+                <div class="input-grp">
+                    <label class="input-lbl" for="f-cbnote">Notes</label>
+                    <textarea id="f-cbnote" class="textarea-field" placeholder="Tone, context, anything useful for next call..."></textarea>
+                </div>
+
+                <div class="btn-row" style="margin-top:6px;">
+                    <button class="abtn secondary" onclick="go('opening')" style="flex:.8">&larr; Back</button>
+                    <button class="abtn primary" onclick="endBusy()" style="flex:1.5">Log &amp; Reset &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- -- CHECK-IN -- -->
+    <div id="s-checkin" class="hidden">
+        <div class="card">
+            <div class="card-head">
+                <span class="stage-badge">Stage 2 of 5</span>
+                <span class="stage-title">Check-In</span>
+            </div>
+            <div class="card-body">
+                <div class="script-box">
+                    <div class="script-lbl">Say This</div>
+                    <div class="script-txt">How has everything been working so far? Any issues with deposits, terminals, or invoices?</div>
+                </div>
+                <div class="outcome-lbl">How's it going for them?</div>
+                <div class="outcome-btns">
+                    <button class="obtn green" onclick="go('review')">
+                        <span class="obtn-icon">&#9786;</span>
+                        <span class="obtn-text">Going Well
+                            <span class="obtn-sub">Proceed to review ask</span>
+                        </span>
+                    </button>
+                    <button class="obtn amber" onclick="go('lukewarm')">
+                        <span class="obtn-icon">&#9888;</span>
+                        <span class="obtn-text">Lukewarm / "It's Fine"
+                            <span class="obtn-sub">Pivot script, no review ask</span>
+                        </span>
+                    </button>
+                    <button class="obtn red" onclick="go('problem')">
+                        <span class="obtn-icon">!</span>
+                        <span class="obtn-text">Has a Problem
+                            <span class="obtn-sub">Resolve mode, no referral ask</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- -- LUKEWARM -- -->
+    <div id="s-lukewarm" class="hidden">
+        <div class="card">
+            <div class="card-head amber">
+                <span class="stage-badge">Lukewarm Path</span>
+                <span class="stage-title">Pivot &amp; Close Warmly</span>
+            </div>
+            <div class="card-body">
+                <div class="notice amber">
+                    <span class="notice-icon">!</span>
+                    <div>No review ask. No referral ask. Focus on understanding and leaving a positive impression.</div>
+                </div>
+
+                <div class="script-box amber-box">
+                    <div class="script-lbl amber-lbl">Pivot. Say This</div>
+                    <div class="script-txt">What's one thing we could do to move that from okay to great?</div>
+                </div>
+
+                <div class="script-box" style="margin-top:12px;">
+                    <div class="script-lbl">Then Wrap Up</div>
+                    <div class="script-txt" id="txt-lukewarm-close"></div>
+                </div>
+
+                <div class="hr"></div>
+                <div class="sec-lbl">Note Their Feedback</div>
+                <textarea id="f-lw-note" class="textarea-field" placeholder="What did they say could be better? (important for CRM)"></textarea>
+
+                <button class="abtn primary" style="margin-top:12px;" onclick="go('close','lukewarm')">Close Call &amp; Log &rarr;</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- -- PROBLEM -- -->
+    <div id="s-problem" class="hidden">
+        <div class="card">
+            <div class="card-head red">
+                <span class="stage-badge">Problem Path</span>
+                <span class="stage-title">Resolve Mode</span>
+            </div>
+            <div class="card-body">
+                <div class="notice red">
+                    <span class="notice-icon">!</span>
+                    <div>No referral ask. Switch fully into support mode. Your only goal is fixing this.</div>
+                </div>
+
+                <div class="script-box red-box">
+                    <div class="script-lbl red-lbl">Say This First</div>
+                    <div class="script-txt">I really appreciate you telling me that. Let me make sure we get that taken care of.</div>
+                </div>
+
+                <div class="script-box" style="margin-top:12px;">
+                    <div class="script-lbl">Then Pick Your Path</div>
+                    <div class="script-txt" style="font-size:15px;">
+                        <p><strong>Quick fix:</strong> "I can actually walk you through that right now. Give me one second."</p>
+                        <p><strong>Needs ticket:</strong> "I'm flagging this for our support team and you'll hear back within [timeframe]. I'll put your name on it personally."</p>
+                        <p><strong>Escalate:</strong> "I want to loop in someone who specializes in exactly this. Can I have them call you today?"</p>
+                    </div>
+                </div>
+
+                <div class="hr"></div>
+                <div class="sec-lbl">Log the Issue</div>
+                <div class="input-grp">
+                    <label class="input-lbl" for="f-prob">Issue</label>
+                    <textarea id="f-prob" class="textarea-field" placeholder="What exactly is wrong?"></textarea>
+                </div>
+                <div class="input-grp">
+                    <label class="input-lbl" for="f-action">Action Committed</label>
+                    <textarea id="f-action" class="textarea-field" placeholder="What did you promise? Be specific. Follow-through matters."></textarea>
+                </div>
+
+                <button class="abtn primary" onclick="go('close','problem')">Issue Handled, Wrap Up &rarr;</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- -- REVIEW ASK -- -->
+    <div id="s-review" class="hidden">
+        <div class="card">
+            <div class="card-head">
+                <span class="stage-badge">Stage 3 of 5</span>
+                <span class="stage-title">Google Review Ask</span>
+            </div>
+            <div class="card-body">
+                <div class="script-box">
+                    <div class="script-lbl">Say This</div>
+                    <div class="script-txt">I'm really glad to hear that. Quick favour. Would you be open to leaving us a Google review? It literally takes 60 seconds and it helps other business owners find us.</div>
+                </div>
+                <div class="outcome-lbl">Their response?</div>
+                <div class="outcome-btns">
+                    <button class="obtn green" onclick="go('review-yes')">
+                        <span class="obtn-icon">&#10003;</span>
+                        <span class="obtn-text">Yes. They're In
+                            <span class="obtn-sub">Send the SMS template now</span>
+                        </span>
+                    </button>
+                    <button class="obtn amber" onclick="go('review-no')">
+                        <span class="obtn-icon">&middot;&middot;&middot;</span>
+                        <span class="obtn-text">No / Maybe Later
+                            <span class="obtn-sub">Graceful exit, close</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- -- REVIEW YES -- -->
+    <div id="s-review-yes" class="hidden">
+        <div class="card">
+            <div class="card-head green">
+                <span class="stage-badge">Stage 3 of 5</span>
+                <span class="stage-title">Send the Review Link</span>
+            </div>
+            <div class="card-body">
+                <div class="script-box green-box">
+                    <div class="script-lbl green-lbl">Say This</div>
+                    <div class="script-txt" id="txt-rev-yes"></div>
+                </div>
+
+                <div class="hr"></div>
+                <div class="sec-lbl">SMS. Copy &amp; Send While on the Call</div>
+
+                <div class="tmpl-box">
+                    <div class="tmpl-lbl">Text Message (Plain)</div>
+                    <div class="tmpl-txt" id="tmpl-sms"></div>
+                    <button class="copy-btn" id="sms-copy-btn" onclick="copyPlain('tmpl-sms','sms-copy-btn','Copy SMS')">Copy SMS</button>
+                </div>
+
+                <div class="tmpl-box" style="margin-top:12px;">
+                    <div class="tmpl-lbl">Email (Rich Text. Paste into Gmail)</div>
+                    <div class="tmpl-txt" id="tmpl-email-display"></div>
+                    <button class="copy-btn" id="email-copy-btn" onclick="copyEmail()">Copy Email (link stays clickable)</button>
+                </div>
+
+                <div class="notice blue">
+                    <span class="notice-icon">i</span>
+                    <div>Send the <strong>SMS while they're still on the line</strong>. They'll see it arrive and trust it's real. Use email as backup only. The email copy preserves the link as a clickable "AllProPay Google Review" when pasted into Gmail.</div>
+                </div>
+
+                <button class="abtn primary" onclick="go('referral')">Link Sent &#10003; &middot; Referral Ask</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- -- REVIEW NO -- -->
+    <div id="s-review-no" class="hidden">
+        <div class="card">
+            <div class="card-head">
+                <span class="stage-badge">Stage 3 of 5</span>
+                <span class="stage-title">Graceful Exit</span>
+            </div>
+            <div class="card-body">
+                <div class="script-box">
+                    <div class="script-lbl">Say This</div>
+                    <div class="script-txt" id="txt-rev-no"></div>
+                </div>
+                <button class="abtn primary" style="margin-top:6px;" onclick="go('close','no-review')">Continue to Close &rarr;</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- -- REFERRAL ASK -- -->
+    <div id="s-referral" class="hidden">
+        <div class="card">
+            <div class="card-head">
+                <span class="stage-badge">Stage 4 of 5</span>
+                <span class="stage-title">Referral Ask</span>
+            </div>
+            <div class="card-body">
+                <div class="script-box">
+                    <div class="script-lbl">Say This</div>
+                    <div class="script-txt">One more thing. Is there anyone else you know, maybe another business owner, who might benefit from better payment processing?</div>
+                </div>
+                <div class="outcome-lbl">Do they have someone in mind?</div>
+                <div class="outcome-btns">
+                    <button class="obtn green" onclick="showReferralYes()">
+                        <span class="obtn-icon">&#10003;</span>
+                        <span class="obtn-text">Yes. They Have Someone
+                            <span class="obtn-sub">Capture name &amp; warm up</span>
+                        </span>
+                    </button>
+                    <button class="obtn amber" onclick="go('close','normal')">
+                        <span class="obtn-icon">&middot;&middot;&middot;</span>
+                        <span class="obtn-text">Not Right Now
+                            <span class="obtn-sub">Close warmly</span>
+                        </span>
+                    </button>
+                </div>
+
+                <!-- Referral YES inline section -->
+                <div id="referral-yes-section" class="hidden" style="margin-top:16px;">
+                    <div class="hr"></div>
+                    <div class="sec-lbl">Capture the Referral</div>
+                    <div class="input-grp">
+                        <label class="input-lbl" for="f-refname">Referral's Name / Business</label>
+                        <input id="f-refname" class="input-field" type="text" placeholder="e.g. Mike. Pizza place on Main St." autocomplete="off" autocapitalize="words">
+                    </div>
+                    <div class="input-grp">
+                        <label class="input-lbl" for="f-refcontact">Contact Info (if given)</label>
+                        <input id="f-refcontact" class="input-field" type="text" placeholder="Phone or email" autocomplete="off">
+                    </div>
+
+                    <div class="script-box green-box" style="margin-top:4px;">
+                        <div class="script-lbl green-lbl">Warm Response</div>
+                        <div class="script-txt" id="txt-referral"></div>
+                    </div>
+
+                    <div class="script-box" style="margin-top:12px;">
+                        <div class="script-lbl">Next Step. Ask Permission</div>
+                        <div class="script-txt" style="font-size:15px;">
+                            <p>"Would it be okay if I reached out to them and mentioned your name?"</p>
+                            <p>"I'll have someone from our team give them a call. We'll take good care of them."</p>
+                        </div>
+                    </div>
+
+                    <button class="abtn primary" style="margin-top:12px;" onclick="go('close','referral')">Referral Logged, Wrap Up &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- -- CLOSE -- -->
+    <div id="s-close" class="hidden">
+        <div class="card">
+            <div class="card-head green">
+                <span class="stage-badge">Stage 5 of 5</span>
+                <span class="stage-title">Warm Close</span>
+            </div>
+            <div class="card-body">
+                <div class="script-box green-box">
+                    <div class="script-lbl green-lbl">Say This</div>
+                    <div class="script-txt" id="txt-close"></div>
+                </div>
+
+                <div class="hr"></div>
+                <div class="sec-lbl">Call Log. Check Off Before Moving On</div>
+                <ul class="checklist">
+                    <li>
+                        <input type="checkbox" id="chk1">
+                        <label for="chk1">Log call outcome in CRM</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="chk2">
+                        <label for="chk2">Note any issues flagged + action committed</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="chk3">
+                        <label for="chk3">Confirm review link sent (if applicable)</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="chk4">
+                        <label for="chk4">Log referral name + contact info (if applicable)</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="chk5">
+                        <label for="chk5">Set follow-up task if anything is unresolved</label>
+                    </li>
+                </ul>
+
+                <button class="start-btn" onclick="confirmReset()" style="margin-top:18px;">Start Next Call</button>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /content -->
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- ====== SCRIPT ====== -->
+<script>
+// ============================================================
+//  CONFIG. Edit these to change reps or the review link.
+// ============================================================
+const REP_LIST = [
+    'Katie',
+    'Tammy Millar',
+    'Chris Ste-Marie',
+    'Matt Butcher',
+    'Kurt Kavi',
+    'Ghassan Jiha'
+    // Add more reps here as needed.
+];
+
+const REVIEW_URL  = 'https://g.page/r/Ca6f5Q33C0JqEBM/review';
+const REVIEW_TEXT = 'AllProPay Google Review';
+
+// Paste your Apps Script web app URL here (ends in /exec). Leave '' to disable logging.
+const LOG_ENDPOINT = '';
+
+// ============================================================
+//  STATE
+// ============================================================
+const STAGE_DEFS = [
+    { id:'opening',  label:'Opening',  screens:['opening','busy'] },
+    { id:'checkin',  label:'Check-In', screens:['checkin','lukewarm','problem'] },
+    { id:'review',   label:'Review',   screens:['review','review-yes','review-no'] },
+    { id:'referral', label:'Referral', screens:['referral'] },
+    { id:'close',    label:'Close',    screens:['close'] },
+];
+
+let S = {
+    screen: 'setup',
+    client: '',
+    rep: '',
+    path: null,         // 'normal' | 'lukewarm' | 'problem' | 'no-review' | 'busy' | 'referral'
+    reviewSent: false,  // true once the rep enters the review-yes path
+    logged: false,      // true once this call has been logged (prevents double logs)
+};
+
+// ============================================================
+//  NAVIGATION
+// ============================================================
+function go(screen, pathFlag) {
+    if (pathFlag) S.path = pathFlag;
+    if (screen === 'lukewarm' && !S.path) S.path = 'lukewarm';
+    if (screen === 'problem'  && !S.path) S.path = 'problem';
+    if (screen === 'review-no') S.path = 'no-review';
+
+    populate(screen);
+    showScreen(screen);
+    renderProgress(screen);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showScreen(name) {
+    document.querySelectorAll('[id^="s-"]').forEach(el => el.classList.add('hidden'));
+    const el = document.getElementById('s-' + name);
+    if (el) el.classList.remove('hidden');
+    S.screen = name;
+}
+
+// ============================================================
+//  POPULATE DYNAMIC TEXT
+// ============================================================
+function em(str) { return '<em>' + esc(str) + '</em>'; }
+function esc(s)  { return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+function populate(screen) {
+    const c = S.client, r = S.rep;
+
+    switch(screen) {
+        case 'opening':
+            set('txt-opening',
+                'Hi ' + em(c) + ', this is ' + em(r) + ' from AllProPay customer support. Just checking in to make sure everything has been going smoothly with your payments. Do you have a couple minutes?');
+            break;
+
+        case 'busy':
+            set('txt-busy',
+                'No problem at all, ' + em(c) + '. When would be a better time to catch you? I want to make sure I reach out when it is convenient.');
+            break;
+
+        case 'lukewarm':
+            set('txt-lukewarm-close',
+                'That feedback is really helpful, ' + em(c) + '. I will make sure to pass that along. We are always looking to get better. Well, I will not keep you. Thanks for taking a couple minutes. Don\'t hesitate to reach out if anything comes up. We are always here for you.');
+            break;
+
+        case 'review-yes':
+            S.reviewSent = true;
+            set('txt-rev-yes',
+                'Amazing, thank you so much ' + em(c) + '. I am going to shoot you a text right now with the link. It should pop up in a second.');
+
+            // Plain SMS. Just the bare URL. SMS doesn't render rich text.
+            document.getElementById('tmpl-sms').textContent =
+                'Hey ' + c + '! Here\'s that Google review link:\n' + REVIEW_URL + '\n\nJust a sentence or two helps a ton. Thanks!';
+
+            // Email. Show the rendered version (link looks like "AllProPay Google Review").
+            // The actual copy-to-clipboard puts both text/plain and text/html on the clipboard,
+            // so pasting into Gmail keeps the link clickable.
+            const emailDisplay = document.getElementById('tmpl-email-display');
+            emailDisplay.innerHTML =
+                'Subject: Quick favour, ' + esc(c) + '? (60 seconds)\n\n' +
+                'Hey ' + esc(c) + ',\n\n' +
+                'Really enjoyed catching up. If you have 60 seconds, a Google review would mean a lot to us:\n\n' +
+                '<a href="' + REVIEW_URL + '" target="_blank">' + REVIEW_TEXT + '</a>\n\n' +
+                'No pressure. Even a sentence goes a long way.\n\n' +
+                'Thanks again,\n' +
+                esc(r) + '\n' +
+                'AllProPay Customer Support';
+            break;
+
+        case 'review-no':
+            set('txt-rev-no',
+                'Totally understand. No pressure at all. If you ever feel like it, we would love it, but no worries. ' + em(c) + ', I am really glad things are running smoothly. We appreciate your business and we are here if you ever need anything.');
+            break;
+
+        case 'referral':
+            set('txt-referral',
+                'That is awesome, ' + em(c) + '. Thank you so much. We love when great businesses recommend us. We will make sure they get the same experience you have had.');
+            break;
+
+        case 'close':
+            let script;
+            switch(S.path) {
+                case 'problem':
+                    script = em(c) + ', thank you again for bringing that to our attention. That is exactly what we are here for. You will hear back from us very soon. Have a great rest of your day, and please don\'t hesitate to call us anytime.';
+                    break;
+                case 'lukewarm':
+                    script = 'Thanks again for your time today, ' + em(c) + '. Your feedback really matters to us and I will make sure it gets to the right people. We are always here if you need anything. Have a great one.';
+                    break;
+                case 'referral':
+                    script = em(c) + ', this has been such a great conversation. Thank you for your time, the kind words, and the referral. We really appreciate you. Have an awesome day and reach out any time.';
+                    break;
+                default:
+                    script = em(c) + ', it was great talking with you. Really glad to hear everything is going well. Don\'t hesitate to reach out any time. That is what we are here for. Have an amazing day.';
+            }
+            set('txt-close', script);
+            ['chk1','chk2','chk3','chk4','chk5'].forEach(id => {
+                document.getElementById(id).checked = false;
+            });
+            logCall();
+            break;
+    }
+}
+
+function set(id, html) {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+}
+
+// ============================================================
+//  START CALL
+// ============================================================
+function startCall() {
+    const c = document.getElementById('f-client').value.trim();
+    const r = document.getElementById('f-rep').value.trim();
+
+    if (!r) { flash('f-rep', 'Pick your name first'); return; }
+    if (!c) { flash('f-client', 'Enter the client\'s name'); return; }
+
+    S.client = c;
+    S.rep    = r;
+    S.path   = null;
+
+    try { localStorage.setItem('app_rep', r); } catch(e) {}
+
+    document.getElementById('callChip').classList.remove('hidden');
+    document.getElementById('hClientName').textContent = c;
+    document.getElementById('hRepName').textContent = r;
+    document.getElementById('progressWrap').classList.remove('hidden');
+
+    go('opening');
+}
+
+function flash(fieldId, msg) {
+    const el = document.getElementById(fieldId);
+    el.style.borderColor = 'var(--red)';
+    el.focus();
+    showToast(msg);
+    setTimeout(() => el.style.borderColor = '', 2000);
+}
+
+// ============================================================
+//  BUSY PATH END
+// ============================================================
+function endBusy() {
+    S.path = 'busy';
+    logCall();
+    showToast('Callback logged. Resetting for next call.');
+    setTimeout(() => resetAll(), 1400);
+}
+
+// ============================================================
+//  REFERRAL YES (inline reveal)
+// ============================================================
+function showReferralYes() {
+    const sec = document.getElementById('referral-yes-section');
+    sec.classList.remove('hidden');
+    setTimeout(() => sec.scrollIntoView({ behavior:'smooth', block:'nearest' }), 60);
+}
+
+// ============================================================
+//  COPY: plain text (for SMS)
+// ============================================================
+function copyPlain(sourceId, btnId, originalLabel) {
+    const text = document.getElementById(sourceId).textContent;
+    doCopy(text, null, btnId, originalLabel);
+}
+
+// ============================================================
+//  COPY: rich email (text/html + text/plain so Gmail keeps the link)
+// ============================================================
+function copyEmail() {
+    const c = S.client, r = S.rep;
+
+    // Plain text fallback (for non-Gmail clients or plain text contexts).
+    const plain =
+        'Subject: Quick favour, ' + c + '? (60 seconds)\n\n' +
+        'Hey ' + c + ',\n\n' +
+        'Really enjoyed catching up. If you have 60 seconds, a Google review would mean a lot to us:\n\n' +
+        REVIEW_TEXT + ': ' + REVIEW_URL + '\n\n' +
+        'No pressure. Even a sentence goes a long way.\n\n' +
+        'Thanks again,\n' +
+        r + '\n' +
+        'AllProPay Customer Support';
+
+    // Rich HTML version (Gmail will use this on paste).
+    const html =
+        '<div style="font-family:Arial,sans-serif;font-size:14px;color:#000;line-height:1.55;">' +
+            '<p><strong>Subject:</strong> Quick favour, ' + esc(c) + '? (60 seconds)</p>' +
+            '<p>Hey ' + esc(c) + ',</p>' +
+            '<p>Really enjoyed catching up. If you have 60 seconds, a Google review would mean a lot to us:</p>' +
+            '<p><a href="' + REVIEW_URL + '" style="color:#0052FF;font-weight:600;">' + REVIEW_TEXT + '</a></p>' +
+            '<p>No pressure. Even a sentence goes a long way.</p>' +
+            '<p>Thanks again,<br>' + esc(r) + '<br>AllProPay Customer Support</p>' +
+        '</div>';
+
+    doCopy(plain, html, 'email-copy-btn', 'Copy Email (link stays clickable)');
+}
+
+function doCopy(plain, html, btnId, originalLabel) {
+    const btn = document.getElementById(btnId);
+    const done = () => {
+        btn.innerHTML = '&#10003; Copied';
+        btn.classList.add('copied');
+        showToast('Copied to clipboard');
+        setTimeout(() => {
+            btn.innerHTML = originalLabel;
+            btn.classList.remove('copied');
+        }, 2200);
+    };
+
+    // Try the modern API with rich text (text/html + text/plain).
+    if (html && navigator.clipboard && window.ClipboardItem) {
+        try {
+            const item = new ClipboardItem({
+                'text/plain': new Blob([plain], {type:'text/plain'}),
+                'text/html':  new Blob([html],  {type:'text/html'})
+            });
+            navigator.clipboard.write([item]).then(done).catch(() => fallbackHtmlCopy(html, plain, done));
+            return;
+        } catch(e) { /* fall through */ }
+    }
+
+    // Plain-only path (SMS or older browser).
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(plain).then(done).catch(() => fallbackPlainCopy(plain, done));
+    } else {
+        fallbackPlainCopy(plain, done);
+    }
+}
+
+// execCommand fallback. Renders the HTML into a hidden div, selects, copies.
+function fallbackHtmlCopy(html, plain, cb) {
+    try {
+        const div = document.createElement('div');
+        div.contentEditable = 'true';
+        div.innerHTML = html;
+        div.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
+        document.body.appendChild(div);
+        const range = document.createRange();
+        range.selectNodeContents(div);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        document.execCommand('copy');
+        sel.removeAllRanges();
+        document.body.removeChild(div);
+        cb();
+    } catch(e) {
+        fallbackPlainCopy(plain, cb);
+    }
+}
+
+function fallbackPlainCopy(text, cb) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;top:-999px;left:-999px;';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e) { showToast('Copy failed. Select and copy manually.'); }
+    document.body.removeChild(ta);
+}
+
+// ============================================================
+//  CALL LOGGING. POSTs a row to the Google Sheet via Apps Script.
+//  Failures are queued in localStorage and retried on next page load.
+// ============================================================
+function logCall() {
+    if (!LOG_ENDPOINT) return;
+    if (S.logged) return;
+    S.logged = true;
+
+    const row = {
+        ts: new Date().toISOString(),
+        rep: S.rep,
+        client: S.client,
+        path: S.path || 'normal',
+        reviewSent: S.reviewSent,
+        referralCaptured: S.path === 'referral',
+        referralName:    document.getElementById('f-refname').value.trim(),
+        referralContact: document.getElementById('f-refcontact').value.trim(),
+        callbackTime:    document.getElementById('f-cbtime').value.trim(),
+        issue:           document.getElementById('f-prob').value.trim(),
+        actionCommitted: document.getElementById('f-action').value.trim(),
+        lukewarmFeedback:document.getElementById('f-lw-note').value.trim(),
+        notes:           document.getElementById('f-cbnote').value.trim()
+    };
+
+    postRow(row).catch(() => queueLog(row));
+}
+
+function postRow(row) {
+    return fetch(LOG_ENDPOINT, {
+        method: 'POST',
+        body: JSON.stringify(row),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        keepalive: true
+    }).then(r => {
+        if (!r || !r.ok) throw new Error('non-ok');
+    });
+}
+
+function queueLog(row) {
+    try {
+        const queue = JSON.parse(localStorage.getItem('log_queue') || '[]');
+        queue.push(row);
+        localStorage.setItem('log_queue', JSON.stringify(queue));
+    } catch(e) {}
+}
+
+function flushQueue() {
+    if (!LOG_ENDPOINT) return;
+    let queue;
+    try { queue = JSON.parse(localStorage.getItem('log_queue') || '[]'); } catch(e) { return; }
+    if (!queue.length) return;
+    const remaining = [];
+    let i = 0;
+    const next = () => {
+        if (i >= queue.length) {
+            try { localStorage.setItem('log_queue', JSON.stringify(remaining)); } catch(e) {}
+            return;
+        }
+        const row = queue[i++];
+        postRow(row).then(next).catch(() => { remaining.push(row); next(); });
+    };
+    next();
+}
+
+// ============================================================
+//  PROGRESS BAR
+// ============================================================
+function renderProgress(currentScreen) {
+    const stepsEl = document.getElementById('progressSteps');
+    stepsEl.innerHTML = '';
+
+    let currentIdx = -1;
+    STAGE_DEFS.forEach((s, i) => {
+        if (s.screens.includes(currentScreen)) currentIdx = i;
+    });
+
+    const skip = new Set();
+    if (S.path === 'lukewarm' || S.path === 'problem') {
+        skip.add('review'); skip.add('referral');
+    }
+    if (S.path === 'no-review') {
+        skip.add('referral');
+    }
+
+    STAGE_DEFS.forEach((stage, i) => {
+        if (i > 0) {
+            const line = document.createElement('div');
+            line.className = 'p-line' + (i <= currentIdx && !skip.has(stage.id) ? ' done' : '');
+            stepsEl.appendChild(line);
+        }
+
+        const step = document.createElement('div');
+        const isSkip = skip.has(stage.id);
+
+        if (isSkip) {
+            step.className = 'p-step skip';
+            step.innerHTML = '<div class="p-dot">&mdash;</div><span>' + stage.label + '</span>';
+        } else if (i < currentIdx) {
+            step.className = 'p-step done';
+            step.innerHTML = '<div class="p-dot">&#10003;</div><span>' + stage.label + '</span>';
+        } else if (i === currentIdx) {
+            step.className = 'p-step active';
+            step.innerHTML = '<div class="p-dot">' + (i+1) + '</div><span>' + stage.label + '</span>';
+        } else {
+            step.className = 'p-step';
+            step.innerHTML = '<div class="p-dot">' + (i+1) + '</div><span>' + stage.label + '</span>';
+        }
+
+        stepsEl.appendChild(step);
+    });
+}
+
+// ============================================================
+//  RESET
+// ============================================================
+function confirmReset() {
+    if (S.screen === 'setup') return;
+    if (!confirm('Reset and start a new call?')) return;
+    resetAll();
+}
+
+function resetAll() {
+    S = { screen:'setup', client:'', rep:'', path:null, reviewSent:false, logged:false };
+
+    document.getElementById('callChip').classList.add('hidden');
+    document.getElementById('progressWrap').classList.add('hidden');
+
+    document.getElementById('f-client').value = '';
+    document.getElementById('f-cbtime').value  = '';
+    document.getElementById('f-cbnote').value  = '';
+    document.getElementById('f-lw-note').value = '';
+    document.getElementById('f-prob').value    = '';
+    document.getElementById('f-action').value  = '';
+    document.getElementById('f-refname').value    = '';
+    document.getElementById('f-refcontact').value = '';
+    document.getElementById('referral-yes-section').classList.add('hidden');
+
+    showScreen('setup');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+//  TOAST
+// ============================================================
+let toastTimer;
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+(function init() {
+    // Populate rep dropdown
+    const sel = document.getElementById('f-rep');
+    REP_LIST.forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.textContent = name;
+        sel.appendChild(opt);
+    });
+
+    // Restore saved rep
+    try {
+        const rep = localStorage.getItem('app_rep');
+        if (rep && REP_LIST.includes(rep)) sel.value = rep;
+    } catch(e) {}
+
+    // Save rep selection on change
+    sel.addEventListener('change', function() {
+        try { localStorage.setItem('app_rep', this.value); } catch(e) {}
+    });
+
+    // Enter key on client name starts the call
+    document.getElementById('f-client').addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); startCall(); }
+    });
+
+    // Retry any queued logs from a previous session
+    flushQueue();
+})();
+</script>
+</body>
+</html>
