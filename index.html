@@ -407,6 +407,10 @@
                         <!-- REP_LIST is populated by JS so it's edited in one place -->
                     </select>
                 </div>
+                <div class="input-grp hidden" id="rep-other-grp">
+                    <label class="input-lbl" for="f-rep-other">Type your name</label>
+                    <input id="f-rep-other" class="input-field" type="text" placeholder="e.g. Alex" autocomplete="off" autocapitalize="words">
+                </div>
                 <div class="input-grp">
                     <label class="input-lbl" for="f-client">Client's First Name</label>
                     <input id="f-client" class="input-field" type="text" placeholder="e.g. Sarah" autocomplete="off" autocapitalize="words">
@@ -797,13 +801,16 @@
 // ============================================================
 const REP_LIST = [
     'Katie',
-    'Tammy Millar',
-    'Chris Ste-Marie',
-    'Matt Butcher',
-    'Kurt Kavi',
-    'Ghassan Jiha'
+    'Tammy',
+    'Chris',
+    'Matt',
+    'Kurt',
+    'Ghassan'
     // Add more reps here as needed.
 ];
+
+// Sentinel value used by the "Other" option in the rep dropdown.
+const OTHER_VALUE = '__other__';
 
 const REVIEW_URL  = 'https://g.page/r/Ca6f5Q33C0JqEBM/review';
 const REVIEW_TEXT = 'AllProPay Google Review';
@@ -946,7 +953,13 @@ function set(id, html) {
 // ============================================================
 function startCall() {
     const c = document.getElementById('f-client').value.trim();
-    const r = document.getElementById('f-rep').value.trim();
+    let r    = document.getElementById('f-rep').value.trim();
+
+    // If "Other" is selected, take the rep name from the text input instead.
+    if (r === OTHER_VALUE) {
+        r = document.getElementById('f-rep-other').value.trim();
+        if (!r) { flash('f-rep-other', 'Type your name first'); return; }
+    }
 
     if (!r) { flash('f-rep', 'Pick your name first'); return; }
     if (!c) { flash('f-client', 'Enter the client\'s name'); return; }
@@ -1224,6 +1237,7 @@ function resetAll() {
     document.getElementById('progressWrap').classList.add('hidden');
 
     document.getElementById('f-client').value = '';
+    // Note: rep selection (and Other text input) is preserved across resets.
     document.getElementById('f-cbtime').value  = '';
     document.getElementById('f-cbnote').value  = '';
     document.getElementById('f-lw-note').value = '';
@@ -1253,8 +1267,11 @@ function showToast(msg) {
 //  INIT
 // ============================================================
 (function init() {
+    const sel       = document.getElementById('f-rep');
+    const otherGrp  = document.getElementById('rep-other-grp');
+    const otherInp  = document.getElementById('f-rep-other');
+
     // Populate rep dropdown
-    const sel = document.getElementById('f-rep');
     REP_LIST.forEach(name => {
         const opt = document.createElement('option');
         opt.value = name;
@@ -1262,20 +1279,55 @@ function showToast(msg) {
         sel.appendChild(opt);
     });
 
-    // Restore saved rep
+    // Always append an "Other" option at the bottom
+    const other = document.createElement('option');
+    other.value = OTHER_VALUE;
+    other.textContent = 'Other (type my name)';
+    sel.appendChild(other);
+
+    // Show/hide the text input based on selection
+    function syncOther() {
+        if (sel.value === OTHER_VALUE) {
+            otherGrp.classList.remove('hidden');
+            setTimeout(() => otherInp.focus(), 50);
+        } else {
+            otherGrp.classList.add('hidden');
+        }
+    }
+
+    // Restore saved rep. If saved name isn't in REP_LIST, treat it as "Other".
     try {
         const rep = localStorage.getItem('app_rep');
-        if (rep && REP_LIST.includes(rep)) sel.value = rep;
+        if (rep) {
+            if (REP_LIST.includes(rep)) {
+                sel.value = rep;
+            } else {
+                sel.value = OTHER_VALUE;
+                otherInp.value = rep;
+            }
+        }
     } catch(e) {}
+    syncOther();
 
-    // Save rep selection on change
+    // Save & sync on change
     sel.addEventListener('change', function() {
-        try { localStorage.setItem('app_rep', this.value); } catch(e) {}
+        syncOther();
+        if (this.value && this.value !== OTHER_VALUE) {
+            try { localStorage.setItem('app_rep', this.value); } catch(e) {}
+        }
+    });
+    otherInp.addEventListener('blur', function() {
+        const v = this.value.trim();
+        if (v) { try { localStorage.setItem('app_rep', v); } catch(e) {} }
     });
 
     // Enter key on client name starts the call
     document.getElementById('f-client').addEventListener('keydown', e => {
         if (e.key === 'Enter') { e.preventDefault(); startCall(); }
+    });
+    // Enter key on Other input also starts the call
+    otherInp.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); document.getElementById('f-client').focus(); }
     });
 
     // Retry any queued logs from a previous session
